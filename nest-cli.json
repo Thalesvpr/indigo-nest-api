@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/indigo-nest-api/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/indigo-nest-api/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/indigo-nest-api",
+  "projects": {
+    "indigo-nest-api": {
+      "type": "application",
+      "root": "apps/indigo-nest-api",
+      "entryFile": "main",
+      "sourceRoot": "apps/indigo-nest-api/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/indigo-nest-api/tsconfig.app.json"
+      }
+    },
+    "admin": {
+      "type": "application",
+      "root": "apps/admin",
+      "entryFile": "main",
+      "sourceRoot": "apps/admin/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/admin/tsconfig.app.json"
+      }
+    }
+  }
+}

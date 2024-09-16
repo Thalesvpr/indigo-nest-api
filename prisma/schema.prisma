@@ -1,0 +1,86 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String
+  price       Float
+  image       String?
+  category    Category   @relation(fields: [categoryId], references: [id])
+  categoryId  Int
+  variants    Variant[]
+  orders      OrderProduct[] // Adiciona relação com OrderProduct
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Category {
+  id        Int        @id @default(autoincrement())
+  name      String
+  products  Product[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Variant {
+  id        Int        @id @default(autoincrement())
+  productId Int
+  product   Product    @relation(fields: [productId], references: [id])
+  size      String
+  color     String
+  price     Float
+  quantity  Int
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model User {
+  id        Int        @id @default(autoincrement())
+  name      String
+  email     String     @unique
+  password  String
+  orders    Order[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Order {
+  id        Int        @id @default(autoincrement())
+  userId    Int
+  user      User       @relation(fields: [userId], references: [id])
+  products  OrderProduct[]
+  status    String     @default("pending")
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model OrderProduct {
+  id        Int        @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  order     Order      @relation(fields: [orderId], references: [id])
+  product   Product    @relation(fields: [productId], references: [id])
+  quantity  Int
+  price     Float
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Admin {
+  id        Int        @id @default(autoincrement())
+  name      String
+  email     String     @unique
+  password  String
+  role      String     // Example roles: 'superadmin', 'manager', 'editor'
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
